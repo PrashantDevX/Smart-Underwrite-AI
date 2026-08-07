@@ -4,7 +4,7 @@
 
 ### *AI-Powered Dynamic Loan Underwriting Platform*
 
-[![AI Hackathon 2026](https://img.shields.io/badge/AI%20Hackathon-2026-blue.svg)](https://github.com)
+[![AI BUILD 2026](https://img.shields.io/badge/AI%20Hackathon-2026-blue.svg)](https://aibuild42.kluniversity.in/)
 [![Python 3.11+](https://img.shields.io/badge/Python-3.11+-green.svg)](https://www.python.org/)
 [![React 19](https://img.shields.io/badge/React-19-61DAFB.svg)](https://reactjs.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg)](https://fastapi.tiangolo.com/)
