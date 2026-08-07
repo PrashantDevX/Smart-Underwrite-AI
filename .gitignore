@@ -27,3 +27,8 @@ dist-ssr
 .env
 .env.local
 .env.production
+QUICKSTART.md
+README_GUIDE.md
+PROJECT_STATUS.md
+FIXES_APPLIED.md
+VERIFICATION_REPORT.md

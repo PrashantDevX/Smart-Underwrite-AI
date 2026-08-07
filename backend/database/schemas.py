@@ -41,15 +41,15 @@ class LoanApplicationRequest(BaseModel):
     credit_score: int
     
     # Alternative Data (optional)
-    email_account_age: Optional[int] = None
+    email_account_age: Optional[float] = None
     utility_payment_history: Optional[str] = None
     failed_transactions: Optional[int] = None
-    device_stability_score: Optional[int] = None
+    device_stability_score: Optional[float] = None
     professional_profile: Optional[bool] = None
     linkedin_verified: Optional[bool] = None
     education_verified: Optional[bool] = None
-    digital_engagement_score: Optional[int] = None
-    location_stability: Optional[int] = None
+    digital_engagement_score: Optional[float] = None
+    location_stability: Optional[float] = None
     
     # Consent
     consent_data: Optional[ConsentDataSchema] = None
