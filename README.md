@@ -14,7 +14,8 @@
 
 [Live Demo](#-quick-start) • [Documentation](#-documentation) • [Architecture](#-architecture) • [Features](#-key-features)
 
-![SmartUnderwrite Banner](https://via.placeholder.com/1200x300/2563eb/ffffff?text=SmartUnderwrite+AI+Platform)
+<img width="1920" height="1080" alt="smart-underwriting-ai" src="https://github.com/user-attachments/assets/0dc7a59d-75fd-4d3b-bbbb-c3f1f0a5a446" />
+
 
 </div>
 
