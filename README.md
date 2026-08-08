@@ -1492,37 +1492,14 @@ ab -n 1000 -c 10 -T 'application/json' \
 - **Enterprise License**: Custom pricing for on-premise
 - **Consulting Services**: Model customization, integration support
 
----
-
-## 🤝 Contributing
-
-We welcome contributions! Please follow these guidelines:
-
-### Development Setup
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature/amazing-feature`
-3. Make changes and test thoroughly
-4. Commit with clear messages: `git commit -m 'Add amazing feature'`
-5. Push to branch: `git push origin feature/amazing-feature`
-6. Open Pull Request
-
-### Code Standards
-- **Python**: Follow PEP 8, use type hints
-- **TypeScript**: Use strict mode, define interfaces
-- **Commits**: Use conventional commits (feat, fix, docs, etc.)
-- **Tests**: Add tests for new features
-
-- **Documentation**: Update README for API changes
-
----
 
 ## 👥 Team
 
 <div align="center">
 
-### Built for AI Hackathon 2026
+### Built for AI Build KL 2026
 
-**Project Team**:
+**Project Team**: TEAM X
 - AI/ML Engineering
 - Full-Stack Development  
 - UI/UX Design
@@ -1560,91 +1537,9 @@ copies or substantial portions of the Software.
 
 ---
 
-## 📞 Contact & Support
-
 
 <div align="center">
 
-### Get in Touch
-
-**GitHub**: [SmartUnderwrite AI Repository](https://github.com/yourusername/smartunderwrite-ai)
-
-**Email**: contact@smartunderwrite.ai
-
-**Demo**: [Live Demo Link](https://smartunderwrite.vercel.app)
-
-**Documentation**: [Full Docs](https://docs.smartunderwrite.ai)
-
----
-
-### Support Resources
-
-| Resource | Link |
-|----------|------|
-| 📚 **Documentation** | [QUICKSTART.md](QUICKSTART.md) |
-| 🐛 **Bug Reports** | [GitHub Issues](https://github.com/yourusername/smartunderwrite-ai/issues) |
-| 💡 **Feature Requests** | [GitHub Discussions](https://github.com/yourusername/smartunderwrite-ai/discussions) |
-| 🔧 **API Reference** | http://localhost:8000/docs |
-| 📊 **Status Page** | [PROJECT_STATUS.md](PROJECT_STATUS.md) |
-
-</div>
-
----
-
-## 🏆 Hackathon Submission
-
-### Evaluation Criteria Coverage
-
-| Criteria | Weight | Our Score | Evidence |
-|----------|--------|-----------|----------|
-| **Business Impact** | 20% | ⭐⭐⭐⭐⭐ | 90% cost reduction, 30% higher approvals |
-| **AI Innovation & Depth** | 20% | ⭐⭐⭐⭐⭐ | Multi-agent, RAG, ML+LLM hybrid |
-| **Technical Excellence** | 20% | ⭐⭐⭐⭐⭐ | Clean code, tested, documented |
-| **Enterprise Architecture** | 15% | ⭐⭐⭐⭐½ | Scalable, missing auth in MVP |
-| **User Experience** | 10% | ⭐⭐⭐⭐⭐ | Modern UI, smooth, responsive |
-
-| **Scalability & Cost** | 10% | ⭐⭐⭐⭐⭐ | Horizontally scalable, cost-optimized |
-| **Presentation** | 5% | ⭐⭐⭐⭐⭐ | Live demo, clear story, metrics |
-
-**Total: 95/100** 🏆
-
-### Key Differentiators
-
-1. **Multi-Agent Architecture**: 7 specialized AI agents vs monolithic approaches
-2. **Cost Optimization**: Classical ML for predictions, LLM only for explanations
-3. **RAG Integration**: Grounded responses, no hallucination risk
-4. **Fairness First**: Built-in bias auditing, not an afterthought
-5. **Alternative Data**: Inclusive lending for thin-file applicants
-6. **Production Ready**: Complete full-stack implementation
-
----
-
-## 🎯 Quick Links
-
-<div align="center">
-
-| Action | Link |
-|--------|------|
-| 🚀 **Start Demo** | [Quick Start Guide](#-quick-start) |
-| 📖 **Read Docs** | [Documentation](#-documentation) |
-| 🏗️ **View Architecture** | [Architecture Section](#-architecture) |
-| 🧪 **Run Tests** | `python test_backend.py` |
-| 📊 **Check Status** | [PROJECT_STATUS.md](PROJECT_STATUS.md) |
-| 💡 **Learn Features** | [Key Features](#-key-features) |
-| 🤝 **Contribute** | [Contributing](#-contributing) |
-
-</div>
-
----
-
-<div align="center">
-
-## ⭐ Star This Repository
-
-If you find this project useful, please consider giving it a star! ⭐
-
-
----
 
 ### 🚀 Built with AI, Powered by Innovation
 
