@@ -7,7 +7,6 @@ import {
   XCircle, 
   ArrowRight, 
   TrendingUp, 
-  TrendingDown,
   FileText,
   Shield,
   Scale,

@@ -27,7 +27,6 @@ const toSnakeCaseApplication = (app: LoanApplication) => ({
   job_role: app.jobRole,
   years_of_employment: Number(app.yearsOfEmployment ?? 1),
   monthly_income: Number(app.monthlyIncome ?? 1000),
-  industry_type: app.industryType,
   // Ensure industry type is always present for backend validation
   industry_type: app.industryType || 'other',
   loan_amount: Number(app.loanAmount),

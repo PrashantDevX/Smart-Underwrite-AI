@@ -3,9 +3,7 @@ import {
   LayoutDashboard, 
   FileText, 
   TrendingUp, 
-  MessageSquare, 
-  Shield, 
-  FileBarChart, 
+  
   Settings,
   Brain
 } from 'lucide-react';

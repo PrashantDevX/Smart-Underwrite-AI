@@ -7,12 +7,12 @@ import Input from '../components/ui/Input';
 import Select from '../components/ui/Select';
 import Card from '../components/ui/Card';
 import type { LoanApplication } from '../types';
-import { api } from '../services/api';
+// api imported only when needed; removed to avoid unused import during build
 
 export default function LoanApplicationPage() {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
-  const [loading, setLoading] = useState(false);
+  
   const [formData, setFormData] = useState<Partial<LoanApplication>>({});
   const [formError, setFormError] = useState<string | null>(null);
 
@@ -23,7 +23,7 @@ export default function LoanApplicationPage() {
     { number: 4, title: 'Alternative Data', icon: Smartphone },
   ];
 
-  const handleInputChange = (field: string, value: string | number | boolean) => {
+  const handleInputChange = (field: string, value: string | number | boolean | undefined) => {
     setFormData(prev => ({ ...prev, [field]: value }));
   };
 
