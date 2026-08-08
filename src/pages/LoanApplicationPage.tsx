@@ -38,16 +38,10 @@ export default function LoanApplicationPage() {
     }
   };
 
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      const result = await api.predictRisk(formData as LoanApplication);
-      navigate('/risk-dashboard', { state: { analysis: result, application: formData } });
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleSubmit = () => {
+    // Navigate to processing page with application data
+    // The ProcessingPage will handle the actual API calls and pipeline processing
+    navigate('/processing', { state: { application: formData as LoanApplication } });
   };
 
   return (
@@ -325,8 +319,8 @@ export default function LoanApplicationPage() {
                   <ChevronRight className="w-5 h-5 ml-2" />
                 </Button>
               ) : (
-                <Button onClick={handleSubmit} disabled={loading}>
-                  {loading ? 'Analyzing...' : 'Analyze Risk'}
+                <Button onClick={handleSubmit}>
+                  Submit Application
                 </Button>
               )}
             </div>

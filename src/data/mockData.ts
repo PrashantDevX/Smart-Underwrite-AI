@@ -1,3 +1,16 @@
+/**
+ * Mock Data - Fallback Only
+ * 
+ * This file contains fallback data used ONLY when:
+ * 1. Backend API is unavailable
+ * 2. No real application history exists yet
+ * 
+ * The application prioritizes:
+ * - Real backend API responses
+ * - localStorage for application history
+ * - These mocks as last resort
+ */
+
 import type { Customer, DashboardStats, RiskAnalysis, ExplainabilityData, FraudAnalysis } from '../types';
 
 export const mockRiskAnalysis: RiskAnalysis = {

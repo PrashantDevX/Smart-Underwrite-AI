@@ -10,8 +10,9 @@ export default function Navbar() {
 
   const navLinks = [
     { path: '/', label: 'Home' },
-    { path: '/apply', label: 'Apply' },
-    { path: '/admin', label: 'Dashboard' },
+    { path: '/consent', label: 'Assessment' },
+    { path: '/history', label: 'History' },
+    { path: '/admin', label: 'Admin' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -45,8 +46,8 @@ export default function Navbar() {
                 {link.label}
               </Link>
             ))}
-            <Link to="/apply">
-              <Button size="sm">Get Started</Button>
+            <Link to="/consent">
+              <Button size="sm">Start Assessment</Button>
             </Link>
           </div>
 
@@ -84,8 +85,8 @@ export default function Navbar() {
                   {link.label}
                 </Link>
               ))}
-              <Link to="/apply" onClick={() => setIsOpen(false)}>
-                <Button className="w-full" size="sm">Get Started</Button>
+              <Link to="/consent" onClick={() => setIsOpen(false)}>
+                <Button className="w-full" size="sm">Start Assessment</Button>
               </Link>
             </div>
           </motion.div>

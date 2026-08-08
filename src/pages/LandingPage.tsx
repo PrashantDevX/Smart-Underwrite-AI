@@ -1,47 +1,47 @@
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { Brain, MessageSquare, Shield, Zap, ArrowRight, CheckCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, Brain, Shield, CheckCircle, Scale, FileText, Activity } from 'lucide-react';
 import Button from '../components/ui/Button';
 import Card from '../components/ui/Card';
 
 export default function LandingPage() {
-  const features = [
+  const capabilities = [
     {
-      icon: Brain,
-      title: 'AI Risk Prediction',
-      description: 'Predict borrower risk using advanced machine learning algorithms.',
-      color: 'blue',
+      icon: Activity,
+      title: 'Alternative Data Analysis',
+      description: 'Beyond credit scores - analyze employment, utility payments, and digital behavior',
     },
     {
-      icon: MessageSquare,
+      icon: Brain,
       title: 'Explainable AI',
-      description: 'Understand why every decision was made with transparent AI explanations.',
-      color: 'emerald',
+      description: 'SHAP-based feature importance with plain language explanations',
     },
     {
       icon: Shield,
       title: 'Fraud Detection',
-      description: 'Identify suspicious customer behaviour and prevent fraudulent applications.',
-      color: 'red',
+      description: 'Isolation Forest ML model with 6 security checks',
     },
     {
-      icon: Zap,
-      title: 'Dynamic Credit Assessment',
-      description: 'Continuously update risk scores based on real-time data.',
-      color: 'amber',
+      icon: Scale,
+      title: 'Fairness Auditing',
+      description: 'Zero bias on protected attributes - disparate impact testing',
     },
-  ];
-
-  const stats = [
-    { value: '95%', label: 'Prediction Accuracy' },
-    { value: '50%', label: 'Faster Decisions' },
-    { value: '24/7', label: 'AI Monitoring' },
+    {
+      icon: CheckCircle,
+      title: 'Dynamic Risk Assessment',
+      description: 'LightGBM model analyzing 26 features in real-time',
+    },
+    {
+      icon: FileText,
+      title: 'AI Generated Reports',
+      description: 'Comprehensive underwriting reports with audit trails',
+    },
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-blue-50 via-white to-emerald-50 py-20 overflow-hidden">
+      <section className="relative overflow-hidden py-20 lg:py-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -49,39 +49,39 @@ export default function LandingPage() {
             transition={{ duration: 0.8 }}
             className="text-center"
           >
+            {/* Hero Badge */}
             <motion.div
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ delay: 0.2, type: 'spring', stiffness: 100 }}
-              className="inline-block mb-6"
+              className="inline-flex items-center space-x-2 bg-white px-4 py-2 rounded-full shadow-sm border border-gray-200 mb-6"
             >
-              <div className="bg-gradient-to-r from-blue-600 to-emerald-500 p-4 rounded-2xl shadow-xl">
-                <Brain className="w-16 h-16 text-white" />
-              </div>
+              <Brain className="w-5 h-5 text-blue-600" />
+              <span className="text-sm font-medium text-gray-700">Enterprise AI Underwriting</span>
             </motion.div>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-              AI-Powered Dynamic{' '}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
+              AI-Powered Loan{' '}
               <span className="bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent">
-                Underwriting System
+                Underwriting Platform
               </span>
             </h1>
 
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Make faster, fairer, and explainable lending decisions using artificial intelligence 
-              and alternative customer data.
+            <p className="text-xl text-gray-600 mb-10 max-w-3xl mx-auto">
+              Multi-agent AI system that analyzes alternative data, detects fraud, ensures fairness, 
+              and provides explainable lending decisions in seconds.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to="/consent">
-                <Button size="lg" className="group">
-                  Start Risk Assessment
+                <Button size="lg" className="group shadow-lg hover:shadow-xl transition-shadow">
+                  Start Assessment
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
               <Link to="/admin">
-                <Button size="lg" variant="outline">
-                  View Demo
+                <Button size="lg" variant="outline" className="shadow-sm">
+                  View Admin Dashboard
                 </Button>
               </Link>
             </div>
@@ -93,76 +93,50 @@ export default function LandingPage() {
         <div className="absolute bottom-20 right-10 w-72 h-72 bg-emerald-300 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-pulse-slow" style={{ animationDelay: '1s' }}></div>
       </section>
 
-      {/* Statistics Section */}
+      {/* Platform Capabilities */}
       <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card glass className="text-center">
-                  <h3 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-emerald-500 bg-clip-text text-transparent mb-2">
-                    {stat.value}
-                  </h3>
-                  <p className="text-gray-600 font-medium">{stat.label}</p>
-                </Card>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">
-              Powerful Features
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Platform Capabilities
             </h2>
-            <p className="text-xl text-gray-600">
-              Everything you need for intelligent loan underwriting
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              7 specialized AI agents working in coordination to provide comprehensive underwriting analysis
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {features.map((feature, index) => {
-              const Icon = feature.icon;
-              const colorClasses = {
-                blue: 'bg-blue-100 text-blue-600',
-                emerald: 'bg-emerald-100 text-emerald-600',
-                red: 'bg-red-100 text-red-600',
-                amber: 'bg-amber-100 text-amber-600',
-              };
-
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {capabilities.map((capability, index) => {
+              const Icon = capability.icon;
               return (
                 <motion.div
-                  key={feature.title}
+                  key={capability.title}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
-                  whileHover={{ y: -5 }}
                 >
-                  <Card className="h-full hover:shadow-xl transition-shadow duration-300">
-                    <div className={`inline-flex p-3 rounded-lg mb-4 ${colorClasses[feature.color as keyof typeof colorClasses]}`}>
-                      <Icon className="w-6 h-6" />
+                  <Card className="h-full hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                    <div className="flex items-start space-x-4">
+                      <div className="flex-shrink-0">
+                        <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-emerald-500 rounded-lg flex items-center justify-center">
+                          <Icon className="w-6 h-6 text-white" />
+                        </div>
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                          {capability.title}
+                        </h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                          {capability.description}
+                        </p>
+                      </div>
                     </div>
-                    <h3 className="text-xl font-bold text-gray-900 mb-2">
-                      {feature.title}
-                    </h3>
-                    <p className="text-gray-600">
-                      {feature.description}
-                    </p>
                   </Card>
                 </motion.div>
               );
@@ -171,62 +145,62 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Benefits Section */}
-      <section className="py-20 bg-white">
+      {/* How It Works */}
+      <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Why Choose SmartUnderwrite AI?
-              </h2>
-              <div className="space-y-4">
-                {[
-                  'Real-time risk assessment using AI',
-                  'Transparent and explainable decisions',
-                  'Advanced fraud detection algorithms',
-                  'Reduced manual review time by 50%',
-                  'Improved approval rates for qualified applicants',
-                  'Compliance-ready reporting and audit trails',
-                ].map((benefit, index) => (
-                  <motion.div
-                    key={benefit}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 }}
-                    className="flex items-start space-x-3"
-                  >
-                    <CheckCircle className="w-6 h-6 text-emerald-500 flex-shrink-0 mt-0.5" />
-                    <span className="text-gray-700 text-lg">{benefit}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Complete Underwriting Journey
+            </h2>
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Experience the full AI-powered underwriting process from application to decision
+            </p>
+          </motion.div>
 
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-            >
-              <Card gradient className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Ready to get started?
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Transform your lending process with AI-powered underwriting.
-                </p>
-                <Link to="/apply">
-                  <Button size="lg" className="w-full">
-                    Apply Now
-                  </Button>
-                </Link>
-              </Card>
-            </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { step: '1', title: 'Consent & Application', desc: 'Provide consent and submit loan application' },
+              { step: '2', title: 'AI Processing', desc: '7 AI agents analyze your application' },
+              { step: '3', title: 'Results & Analysis', desc: 'View risk score, fraud check, fairness audit' },
+              { step: '4', title: 'AI Report', desc: 'Download comprehensive underwriting report' },
+            ].map((item, index) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+              >
+                <Card className="text-center h-full">
+                  <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-emerald-500 rounded-full flex items-center justify-center text-white text-xl font-bold mx-auto mb-4">
+                    {item.step}
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-600">{item.desc}</p>
+                </Card>
+              </motion.div>
+            ))}
           </div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.5 }}
+            className="text-center mt-12"
+          >
+            <Link to="/consent">
+              <Button size="lg" className="shadow-lg">
+                Begin Underwriting Assessment
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+            </Link>
+          </motion.div>
         </div>
       </section>
     </div>

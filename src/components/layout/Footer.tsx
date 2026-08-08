@@ -39,40 +39,40 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Product */}
+          {/* Application */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Product</h3>
+            <h3 className="text-white font-semibold mb-4">Application</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="hover:text-white transition-colors">Features</Link>
+                <Link to="/" className="hover:text-white transition-colors">Home</Link>
               </li>
               <li>
-                <Link to="/apply" className="hover:text-white transition-colors">Apply Now</Link>
+                <Link to="/consent" className="hover:text-white transition-colors">Start Assessment</Link>
               </li>
               <li>
-                <Link to="/admin" className="hover:text-white transition-colors">Dashboard</Link>
+                <Link to="/history" className="hover:text-white transition-colors">History</Link>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">Pricing</a>
+                <Link to="/admin" className="hover:text-white transition-colors">Admin Dashboard</Link>
               </li>
             </ul>
           </div>
 
-          {/* Company */}
+          {/* Legal & Support */}
           <div>
-            <h3 className="text-white font-semibold mb-4">Company</h3>
+            <h3 className="text-white font-semibold mb-4">Legal & Support</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="hover:text-white transition-colors">About</a>
+                <a href="#" className="hover:text-white transition-colors">Privacy Policy</a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">Careers</a>
+                <a href="#" className="hover:text-white transition-colors">Terms of Service</a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">Contact</a>
+                <a href="#" className="hover:text-white transition-colors">Data Processing Agreement</a>
               </li>
               <li>
-                <a href="#" className="hover:text-white transition-colors">Privacy</a>
+                <Link to="/settings" className="hover:text-white transition-colors">Settings</Link>
               </li>
             </ul>
           </div>
