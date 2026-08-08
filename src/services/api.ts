@@ -17,24 +17,26 @@ const API_BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:8000').r
 
 const toSnakeCaseApplication = (app: LoanApplication) => ({
   full_name: app.fullName,
-  age: Number(app.age),
+  age: Number(app.age ?? 30),
   email: app.email,
   phone: app.phone,
   location: app.location,
-  education: app.education,
+  education: app.education || 'Not specified',
   employment_type: app.employmentType,
   company_name: app.companyName,
   job_role: app.jobRole,
-  years_of_employment: Number(app.yearsOfEmployment),
-  monthly_income: Number(app.monthlyIncome),
+  years_of_employment: Number(app.yearsOfEmployment ?? 1),
+  monthly_income: Number(app.monthlyIncome ?? 1000),
   industry_type: app.industryType,
+  // Ensure industry type is always present for backend validation
+  industry_type: app.industryType || 'other',
   loan_amount: Number(app.loanAmount),
   loan_purpose: app.loanPurpose,
-  monthly_expenses: Number(app.monthlyExpenses),
-  savings: Number(app.savings),
-  existing_loans: Number(app.existingLoans),
-  monthly_debt: Number(app.monthlyDebt),
-  credit_score: Number(app.creditScore),
+  monthly_expenses: Number(app.monthlyExpenses ?? 0),
+  savings: Number(app.savings ?? 0),
+  existing_loans: Number(app.existingLoans ?? 0),
+  monthly_debt: Number(app.monthlyDebt ?? 0),
+  credit_score: Number(app.creditScore ?? 650),
   email_account_age: app.emailAccountAge ? Number(app.emailAccountAge) : 5,
   utility_payment_history: app.utilityPaymentHistory || 'good',
   failed_transactions: app.failedTransactions ? Number(app.failedTransactions) : 0,
@@ -139,11 +141,12 @@ const formatBackendResponse = (data: any) => {
 // ============= MOCK FALLBACK DATA GENERATORS =============
 
 const generateMockRiskAnalysis = (application: LoanApplication): RiskAnalysis => {
-  const debtRatio = (application.monthlyDebt / application.monthlyIncome) * 100;
-  const savingsRatio = (application.savings / application.loanAmount) * 100;
-  const riskScore = Math.max(5, Math.min(95, 
-    30 - (application.creditScore / 10) + (debtRatio / 2) - (savingsRatio / 5)
-  ));
+  const safeMonthlyIncome = Number(application.monthlyIncome) || 1;
+  const safeLoanAmount = Number(application.loanAmount) || 1;
+  const debtRatio = (Number(application.monthlyDebt) / safeMonthlyIncome) * 100;
+  const savingsRatio = (Number(application.savings) / safeLoanAmount) * 100;
+  const computed = 30 - (Number(application.creditScore) / 10) + (debtRatio / 2) - (savingsRatio / 5);
+  const riskScore = Math.max(5, Math.min(95, Number.isFinite(computed) ? computed : 50));
 
   return {
     riskScore: Math.round(riskScore),
@@ -254,8 +257,31 @@ export const api = {
           timestamp: new Date().toISOString(),
         };
       }
+
+      // Surface client errors (validation) back to caller without falling back
+      if (response.status >= 400 && response.status < 500) {
+        const errJson = await response.json().catch(async () => ({ detail: await response.text() }));
+        // Format Pydantic/FastAPI validation details into a readable string
+        let msg: string;
+        if (errJson && errJson.detail) {
+          msg = typeof errJson.detail === 'string' ? errJson.detail : JSON.stringify(errJson.detail, null, 2);
+        } else if (errJson && errJson.error) {
+          msg = String(errJson.error);
+        } else {
+          msg = JSON.stringify(errJson);
+        }
+        console.warn('Backend validation failed:', errJson);
+        return {
+          success: false,
+          error: `Validation error: ${msg}`,
+          timestamp: new Date().toISOString(),
+        };
+      }
+
+      // For server errors, throw to trigger fallback behavior below
+      throw new Error(`Server error: ${response.status}`);
     } catch (error) {
-      console.warn('Backend API connection failed, using fallback:', error);
+      console.warn('Backend API connection failed or server error, using fallback:', error);
     }
 
     // Fallback if backend is restarting

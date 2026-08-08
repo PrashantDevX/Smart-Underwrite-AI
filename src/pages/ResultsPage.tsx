@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
@@ -17,25 +17,52 @@ import Card from '../components/ui/Card';
 import Badge from '../components/ui/Badge';
 import Button from '../components/ui/Button';
 import { useUnderwriting } from '../contexts/UnderwritingContext';
+import type { RiskAnalysis, UnderwritingDecision, FraudAnalysis, FairnessReport } from '../types';
 
 export default function ResultsPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { risk, decision, fraud, fairness } = useUnderwriting();
+  const [loading, setLoading] = useState(true);
+  const [localRisk, setLocalRisk] = useState<RiskAnalysis | null>(risk);
+  const [localDecision, setLocalDecision] = useState<UnderwritingDecision | null>(decision);
+  const [localFraud, setLocalFraud] = useState<FraudAnalysis | null>(fraud);
+  const [localFairness, setLocalFairness] = useState<FairnessReport | null>(fairness);
 
   useEffect(() => {
-    if (!risk || !decision) {
-      // Try to load from history
-      const history = JSON.parse(localStorage.getItem('underwriting_history') || '[]');
-      const application = history.find((app: any) => app.id === id);
-      
-      if (!application) {
-        navigate('/apply');
-      }
+    // If context has data, use it
+    if (risk && decision && fraud && fairness) {
+      setLocalRisk(risk);
+      setLocalDecision(decision);
+      setLocalFraud(fraud);
+      setLocalFairness(fairness);
+      setLoading(false);
+      return;
     }
-  }, [id, risk, decision, navigate]);
 
-  if (!risk || !decision) {
+    // Otherwise, try to load from history
+    const history = JSON.parse(localStorage.getItem('underwriting_history') || '[]');
+    const application = history.find((app: any) => app.id === id);
+    
+    if (!application) {
+      navigate('/apply');
+      return;
+    }
+
+    // Load cached results from localStorage if available
+    const cachedResults = localStorage.getItem(`results_${id}`);
+    if (cachedResults) {
+      const results = JSON.parse(cachedResults);
+      setLocalRisk(results.risk);
+      setLocalDecision(results.decision);
+      setLocalFraud(results.fraud);
+      setLocalFairness(results.fairness);
+    }
+    
+    setLoading(false);
+  }, [id, risk, decision, fraud, fairness, navigate]);
+
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
@@ -45,27 +72,43 @@ export default function ResultsPage() {
     );
   }
 
+  if (!localRisk || !localDecision) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">No results found. Please submit an application first.</p>
+          <Link to="/apply" className="mt-4 inline-block">
+            <Button>Start Application</Button>
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
   const getRiskColor = () => {
-    if (risk.riskLevel === 'LOW RISK') return 'emerald';
-    if (risk.riskLevel === 'MEDIUM RISK') return 'amber';
+    if (!localRisk) return 'emerald';
+    if (localRisk.riskLevel === 'LOW RISK') return 'emerald';
+    if (localRisk.riskLevel === 'MEDIUM RISK') return 'amber';
     return 'red';
   };
 
   const getDecisionIcon = () => {
-    if (decision.decision === 'APPROVED' || decision.decision === 'APPROVED_LOWER_LIMIT') {
+    if (!localDecision) return CheckCircle;
+    if (localDecision.decision === 'APPROVED' || localDecision.decision === 'APPROVED_LOWER_LIMIT') {
       return CheckCircle;
     }
-    if (decision.decision === 'MANUAL_REVIEW' || decision.decision === 'NEED_MORE_DOCUMENTS') {
+    if (localDecision.decision === 'MANUAL_REVIEW' || localDecision.decision === 'NEED_MORE_DOCUMENTS') {
       return AlertCircle;
     }
     return XCircle;
   };
 
   const getDecisionColor = () => {
-    if (decision.decision === 'APPROVED' || decision.decision === 'APPROVED_LOWER_LIMIT') {
+    if (!localDecision) return 'success';
+    if (localDecision.decision === 'APPROVED' || localDecision.decision === 'APPROVED_LOWER_LIMIT') {
       return 'success';
     }
-    if (decision.decision === 'MANUAL_REVIEW' || decision.decision === 'NEED_MORE_DOCUMENTS') {
+    if (localDecision.decision === 'MANUAL_REVIEW' || localDecision.decision === 'NEED_MORE_DOCUMENTS') {
       return 'warning';
     }
     return 'danger';
@@ -73,7 +116,7 @@ export default function ResultsPage() {
 
   const DecisionIcon = getDecisionIcon();
   const riskColor = getRiskColor();
-  const scorePercentage = 100 - risk.riskScore;
+  const scorePercentage = 100 - localRisk.riskScore;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-emerald-50 py-12">
@@ -96,45 +139,45 @@ export default function ResultsPage() {
               <div className="flex items-center space-x-4 mb-4 md:mb-0">
                 <div className={`
                   w-16 h-16 rounded-full flex items-center justify-center
-                  ${decision.decision === 'APPROVED' || decision.decision === 'APPROVED_LOWER_LIMIT' ? 'bg-green-100' : 
-                    decision.decision === 'REJECTED' ? 'bg-red-100' : 'bg-amber-100'}
+                  ${localDecision.decision === 'APPROVED' || localDecision.decision === 'APPROVED_LOWER_LIMIT' ? 'bg-green-100' : 
+                    localDecision.decision === 'REJECTED' ? 'bg-red-100' : 'bg-amber-100'}
                 `}>
                   <DecisionIcon className={`
                     w-8 h-8
-                    ${decision.decision === 'APPROVED' || decision.decision === 'APPROVED_LOWER_LIMIT' ? 'text-green-600' : 
-                      decision.decision === 'REJECTED' ? 'text-red-600' : 'text-amber-600'}
+                    ${localDecision.decision === 'APPROVED' || localDecision.decision === 'APPROVED_LOWER_LIMIT' ? 'text-green-600' : 
+                      localDecision.decision === 'REJECTED' ? 'text-red-600' : 'text-amber-600'}
                   `} />
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">
-                    {decision.decision.replace(/_/g, ' ')}
+                    {localDecision.decision.replace(/_/g, ' ')}
                   </h2>
-                  <p className="text-gray-600">Confidence: {decision.confidence}%</p>
+                  <p className="text-gray-600">Confidence: {localDecision.confidence}%</p>
                 </div>
               </div>
               <Badge variant={getDecisionColor()} className="text-lg px-4 py-2">
-                {decision.decision.replace(/_/g, ' ')}
+                {localDecision.decision.replace(/_/g, ' ')}
               </Badge>
             </div>
 
             <div className="border-t border-gray-200 pt-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-3">Decision Summary</h3>
-              <p className="text-gray-700 leading-relaxed mb-4">{decision.reason}</p>
+              <p className="text-gray-700 leading-relaxed mb-4">{localDecision.reason}</p>
               
-              {decision.approvedAmount && (
+              {localDecision.approvedAmount && (
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-4">
                   <p className="text-sm font-medium text-blue-900">Approved Loan Amount</p>
                   <p className="text-2xl font-bold text-blue-700">
-                    ₹{decision.approvedAmount.toLocaleString()}
+                    ₹{localDecision.approvedAmount.toLocaleString()}
                   </p>
                 </div>
               )}
 
-              {decision.nextSteps && decision.nextSteps.length > 0 && (
+              {localDecision.nextSteps && localDecision.nextSteps.length > 0 && (
                 <div className="mt-4">
                   <h4 className="text-sm font-semibold text-gray-900 mb-2">Next Steps:</h4>
                   <ul className="list-disc list-inside space-y-1">
-                    {decision.nextSteps.map((step, idx) => (
+                    {localDecision.nextSteps.map((step, idx) => (
                       <li key={idx} className="text-sm text-gray-700">{step}</li>
                     ))}
                   </ul>
@@ -197,7 +240,7 @@ export default function ResultsPage() {
                       animate={{ scale: 1 }}
                       transition={{ delay: 0.5, type: 'spring' }}
                     >
-                      {risk.riskScore}
+                      {localRisk.riskScore}
                     </motion.p>
                     <p className="text-gray-600">Risk Score</p>
                   </div>
@@ -208,12 +251,12 @@ export default function ResultsPage() {
                 <div className="text-center p-3 bg-gray-50 rounded-lg">
                   <p className="text-sm text-gray-600 mb-1">Risk Level</p>
                   <p className={`text-lg font-bold text-${riskColor}-600`}>
-                    {risk.riskLevel}
+                    {localRisk.riskLevel}
                   </p>
                 </div>
                 <div className="text-center p-3 bg-gray-50 rounded-lg">
                   <p className="text-sm text-gray-600 mb-1">Model Confidence</p>
-                  <p className="text-lg font-bold text-gray-900">{risk.confidence}%</p>
+                  <p className="text-lg font-bold text-gray-900">{localRisk.confidence}%</p>
                 </div>
               </div>
             </Card>
@@ -225,12 +268,12 @@ export default function ResultsPage() {
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm text-gray-600">Fraud Score</span>
-                    <span className="text-sm font-semibold text-gray-900">{fraud?.fraudScore || 0}/100</span>
+                    <span className="text-sm font-semibold text-gray-900">{localFraud?.fraudScore || 0}/100</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
                       className="bg-green-500 h-2 rounded-full"
-                      style={{ width: `${100 - (fraud?.fraudScore || 0)}%` }}
+                      style={{ width: `${100 - (localFraud?.fraudScore || 0)}%` }}
                     />
                   </div>
                 </div>
@@ -238,12 +281,12 @@ export default function ResultsPage() {
                 <div>
                   <div className="flex items-center justify-between mb-1">
                     <span className="text-sm text-gray-600">Fairness Score</span>
-                    <span className="text-sm font-semibold text-gray-900">{fairness?.overallScore || 0}/100</span>
+                    <span className="text-sm font-semibold text-gray-900">{localFairness?.overallScore || 0}/100</span>
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2">
                     <div 
                       className="bg-blue-500 h-2 rounded-full"
-                      style={{ width: `${fairness?.overallScore || 0}%` }}
+                      style={{ width: `${localFairness?.overallScore || 0}%` }}
                     />
                   </div>
                 </div>
@@ -251,14 +294,14 @@ export default function ResultsPage() {
                 <div className="pt-4 border-t border-gray-200">
                   <div className="flex items-center justify-between text-sm mb-2">
                     <span className="text-gray-600">Fraud Status</span>
-                    <Badge variant={fraud?.fraudRisk === 'LOW' ? 'success' : 'warning'}>
-                      {fraud?.fraudRisk || 'LOW'}
+                    <Badge variant={localFraud?.fraudRisk === 'LOW' ? 'success' : 'warning'}>
+                      {localFraud?.fraudRisk || 'LOW'}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between text-sm">
                     <span className="text-gray-600">Fairness Status</span>
-                    <Badge variant={fairness?.status === 'PASSED' ? 'success' : 'warning'}>
-                      {fairness?.status || 'PASSED'}
+                    <Badge variant={localFairness?.status === 'PASSED' ? 'success' : 'warning'}>
+                      {localFairness?.status || 'PASSED'}
                     </Badge>
                   </div>
                 </div>
@@ -271,10 +314,10 @@ export default function ResultsPage() {
             <h3 className="text-xl font-bold text-gray-900 mb-4">Engineered Features</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               {[
-                { label: 'Income Stability', value: risk.features.incomeStability, icon: TrendingUp },
-                { label: 'Employment Stability', value: risk.features.employmentStability, icon: TrendingUp },
-                { label: 'Financial Discipline', value: risk.features.financialDisciplineScore, icon: TrendingUp },
-                { label: 'Digital Trust Score', value: risk.features.digitalTrustScore, icon: TrendingUp },
+                { label: 'Income Stability', value: localRisk.features.incomeStability, icon: TrendingUp },
+                { label: 'Employment Stability', value: localRisk.features.employmentStability, icon: TrendingUp },
+                { label: 'Financial Discipline', value: localRisk.features.financialDisciplineScore, icon: TrendingUp },
+                { label: 'Digital Trust Score', value: localRisk.features.digitalTrustScore, icon: TrendingUp },
               ].map((feature) => {
                 const Icon = feature.icon;
                 const isPositive = feature.value >= 70;

@@ -125,6 +125,9 @@ export default function ProcessingPage() {
           setApplicationId(appId);
           setResults(response.data);
 
+          // Store results in localStorage for persistence
+          localStorage.setItem(`results_${appId}`, JSON.stringify(response.data));
+
           // Store in localStorage for history
           const history = JSON.parse(localStorage.getItem('underwriting_history') || '[]');
           history.unshift({
@@ -142,7 +145,14 @@ export default function ProcessingPage() {
             navigate(`/results/${appId}`);
           }, 1000);
         } else {
-          throw new Error('Failed to process application');
+          // Surface backend validation errors to the user
+          const errMsg = response.error || 'Failed to process application';
+          setError(errMsg);
+          setProcessingStage('error');
+          setStages(prev => prev.map((stage, idx) =>
+            idx === currentStageIndex ? { ...stage, status: 'error' as const } : stage
+          ));
+          return;
         }
       } catch (err) {
         console.error('Processing error:', err);

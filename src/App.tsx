@@ -12,6 +12,7 @@ import ExplainabilityPage from './pages/ExplainabilityPage';
 import FraudDetectionPage from './pages/FraudDetectionPage';
 import FairnessPage from './pages/FairnessPage';
 import ReportPage from './pages/ReportPage';
+import RiskDashboardPage from './pages/RiskDashboardPage';
 
 // Secondary Pages
 import HistoryPage from './pages/HistoryPage';
@@ -35,6 +36,7 @@ function App() {
             <Route path="/fraud/:id" element={<FraudDetectionPage />} />
             <Route path="/fairness/:id" element={<FairnessPage />} />
             <Route path="/report/:id" element={<ReportPage />} />
+            <Route path="/admin/risk-analysis" element={<RiskDashboardPage />} />
             
             {/* Secondary Pages */}
             <Route path="/history" element={<HistoryPage />} />

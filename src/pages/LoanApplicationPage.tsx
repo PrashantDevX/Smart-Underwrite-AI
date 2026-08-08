@@ -14,6 +14,7 @@ export default function LoanApplicationPage() {
   const [currentStep, setCurrentStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<Partial<LoanApplication>>({});
+  const [formError, setFormError] = useState<string | null>(null);
 
   const steps = [
     { number: 1, title: 'Personal Information', icon: User },
@@ -39,8 +40,26 @@ export default function LoanApplicationPage() {
   };
 
   const handleSubmit = () => {
-    // Navigate to processing page with application data
-    // The ProcessingPage will handle the actual API calls and pipeline processing
+    // Basic client-side validation to prevent missing/NaN fields
+    setFormError(null);
+    const requiredNumbers = ['age', 'monthlyIncome', 'loanAmount', 'monthlyDebt'];
+    for (const key of requiredNumbers) {
+      const val = (formData as any)[key];
+      if (val === undefined || val === null || Number.isNaN(Number(val)) || !isFinite(Number(val))) {
+        setFormError('Please complete all required numeric fields before submitting.');
+        return;
+      }
+    }
+    if (!formData.fullName || String(formData.fullName).trim().length === 0) {
+      setFormError('Please provide your full name.');
+      return;
+    }
+    if (!formData.email || !String(formData.email).includes('@')) {
+      setFormError('Please provide a valid email address.');
+      return;
+    }
+
+    // Navigate to processing page with validated application data
     navigate('/processing', { state: { application: formData as LoanApplication } });
   };
 
@@ -95,6 +114,11 @@ export default function LoanApplicationPage() {
 
           {/* Form Content */}
           <Card glass className="p-8">
+            {formError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded">
+                <p className="text-sm text-red-800">{formError}</p>
+              </div>
+            )}
             <AnimatePresence mode="wait">
               {currentStep === 1 && (
                 <motion.div
@@ -108,33 +132,33 @@ export default function LoanApplicationPage() {
                   <Input
                     label="Full Name"
                     placeholder="John Doe"
-                    value={formData.fullName || ''}
+                    value={formData.fullName ?? ''}
                     onChange={(e) => handleInputChange('fullName', e.target.value)}
                   />
                   <Input
                     label="Age"
                     type="number"
                     placeholder="30"
-                    value={formData.age || ''}
-                    onChange={(e) => handleInputChange('age', Number(e.target.value))}
+                    value={formData.age ?? ''}
+                    onChange={(e) => handleInputChange('age', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Input
                     label="Email"
                     type="email"
                     placeholder="john@example.com"
-                    value={formData.email || ''}
+                    value={formData.email ?? ''}
                     onChange={(e) => handleInputChange('email', e.target.value)}
                   />
                   <Input
                     label="Phone Number"
                     placeholder="+1 234 567 8900"
-                    value={formData.phone || ''}
+                    value={formData.phone ?? ''}
                     onChange={(e) => handleInputChange('phone', e.target.value)}
                   />
                   <Input
                     label="Location"
                     placeholder="New York, USA"
-                    value={formData.location || ''}
+                    value={formData.location ?? ''}
                     onChange={(e) => handleInputChange('location', e.target.value)}
                   />
                 </motion.div>
@@ -151,7 +175,7 @@ export default function LoanApplicationPage() {
                   <h2 className="text-2xl font-bold text-gray-900 mb-6">Employment Information</h2>
                   <Select
                     label="Employment Type"
-                    value={formData.employmentType || ''}
+                    value={formData.employmentType ?? ''}
                     onChange={(e) => handleInputChange('employmentType', e.target.value)}
                     options={[
                       { value: 'full-time', label: 'Full Time' },
@@ -163,28 +187,28 @@ export default function LoanApplicationPage() {
                   <Input
                     label="Company Name"
                     placeholder="Acme Corporation"
-                    value={formData.companyName || ''}
+                    value={formData.companyName ?? ''}
                     onChange={(e) => handleInputChange('companyName', e.target.value)}
                   />
                   <Input
                     label="Job Role"
                     placeholder="Software Engineer"
-                    value={formData.jobRole || ''}
+                    value={formData.jobRole ?? ''}
                     onChange={(e) => handleInputChange('jobRole', e.target.value)}
                   />
                   <Input
                     label="Years of Employment"
                     type="number"
                     placeholder="5"
-                    value={formData.yearsOfEmployment || ''}
-                    onChange={(e) => handleInputChange('yearsOfEmployment', Number(e.target.value))}
+                    value={formData.yearsOfEmployment ?? ''}
+                    onChange={(e) => handleInputChange('yearsOfEmployment', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Input
                     label="Monthly Income ($)"
                     type="number"
                     placeholder="5000"
-                    value={formData.monthlyIncome || ''}
-                    onChange={(e) => handleInputChange('monthlyIncome', Number(e.target.value))}
+                    value={formData.monthlyIncome ?? ''}
+                    onChange={(e) => handleInputChange('monthlyIncome', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                 </motion.div>
               )}
@@ -202,12 +226,12 @@ export default function LoanApplicationPage() {
                     label="Loan Amount Requested ($)"
                     type="number"
                     placeholder="50000"
-                    value={formData.loanAmount || ''}
-                    onChange={(e) => handleInputChange('loanAmount', Number(e.target.value))}
+                    value={formData.loanAmount ?? ''}
+                    onChange={(e) => handleInputChange('loanAmount', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Select
                     label="Loan Purpose"
-                    value={formData.loanPurpose || ''}
+                    value={formData.loanPurpose ?? ''}
                     onChange={(e) => handleInputChange('loanPurpose', e.target.value)}
                     options={[
                       { value: 'home', label: 'Home Purchase' },
@@ -221,29 +245,29 @@ export default function LoanApplicationPage() {
                     label="Monthly Expenses ($)"
                     type="number"
                     placeholder="2000"
-                    value={formData.monthlyExpenses || ''}
-                    onChange={(e) => handleInputChange('monthlyExpenses', Number(e.target.value))}
+                    value={formData.monthlyExpenses ?? ''}
+                    onChange={(e) => handleInputChange('monthlyExpenses', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Input
                     label="Savings ($)"
                     type="number"
                     placeholder="10000"
-                    value={formData.savings || ''}
-                    onChange={(e) => handleInputChange('savings', Number(e.target.value))}
+                    value={formData.savings ?? ''}
+                    onChange={(e) => handleInputChange('savings', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Input
                     label="Existing Loans ($)"
                     type="number"
                     placeholder="5000"
-                    value={formData.existingLoans || ''}
-                    onChange={(e) => handleInputChange('existingLoans', Number(e.target.value))}
+                    value={formData.existingLoans ?? ''}
+                    onChange={(e) => handleInputChange('existingLoans', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Input
                     label="Monthly Debt Payment ($)"
                     type="number"
                     placeholder="500"
-                    value={formData.monthlyDebt || ''}
-                    onChange={(e) => handleInputChange('monthlyDebt', Number(e.target.value))}
+                    value={formData.monthlyDebt ?? ''}
+                    onChange={(e) => handleInputChange('monthlyDebt', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                 </motion.div>
               )}
@@ -261,12 +285,12 @@ export default function LoanApplicationPage() {
                     label="Email Account Age (years)"
                     type="number"
                     placeholder="8"
-                    value={formData.emailAccountAge || ''}
-                    onChange={(e) => handleInputChange('emailAccountAge', Number(e.target.value))}
+                    value={formData.emailAccountAge ?? ''}
+                    onChange={(e) => handleInputChange('emailAccountAge', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Select
                     label="Utility Payment History"
-                    value={formData.utilityPaymentHistory || ''}
+                    value={formData.utilityPaymentHistory ?? ''}
                     onChange={(e) => handleInputChange('utilityPaymentHistory', e.target.value)}
                     options={[
                       { value: 'excellent', label: 'Excellent (100% on-time)' },
@@ -279,15 +303,15 @@ export default function LoanApplicationPage() {
                     label="Number of Failed Transactions (last year)"
                     type="number"
                     placeholder="2"
-                    value={formData.failedTransactions || ''}
-                    onChange={(e) => handleInputChange('failedTransactions', Number(e.target.value))}
+                    value={formData.failedTransactions ?? ''}
+                    onChange={(e) => handleInputChange('failedTransactions', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Input
                     label="Device Stability Score (0-100)"
                     type="number"
                     placeholder="85"
-                    value={formData.deviceStabilityScore || ''}
-                    onChange={(e) => handleInputChange('deviceStabilityScore', Number(e.target.value))}
+                    value={formData.deviceStabilityScore ?? ''}
+                    onChange={(e) => handleInputChange('deviceStabilityScore', e.target.value === '' ? undefined : Number(e.target.value))}
                   />
                   <Select
                     label="Professional Profile Available"

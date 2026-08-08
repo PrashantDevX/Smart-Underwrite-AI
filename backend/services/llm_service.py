@@ -84,21 +84,37 @@ class LLMService:
             f"User Query: {query}\n\n"
             f"Answer:"
         )
-        try:
-            async with httpx.AsyncClient(timeout=3.0) as client:
-                resp = await client.post(
-                    f"{self.ollama_url}/api/generate",
-                    json={
-                        "model": self.ollama_model,
-                        "prompt": prompt,
-                        "stream": False
-                    }
-                )
-                if resp.status_code == 200:
-                    data = resp.json()
-                    return data.get("response", "").strip()
-        except Exception as e:
-            logger.debug(f"Ollama connection check failed or timed out: {e}")
+        # Retry on transient errors (503/timeout) with exponential backoff
+        max_retries = 3
+        backoff_base = 0.5
+        for attempt in range(1, max_retries + 1):
+            try:
+                async with httpx.AsyncClient(timeout=5.0) as client:
+                    resp = await client.post(
+                        f"{self.ollama_url}/api/generate",
+                        json={
+                            "model": self.ollama_model,
+                            "prompt": prompt,
+                            "stream": False
+                        }
+                    )
+                    if resp.status_code == 200:
+                        data = resp.json()
+                        return data.get("response", "").strip()
+                    # Treat 503 as transient and retry
+                    if resp.status_code == 503:
+                        logger.warning(f"Ollama returned 503 (attempt {attempt}), will retry")
+                    else:
+                        logger.debug(f"Ollama returned status {resp.status_code}: {resp.text}")
+                        return None
+            except Exception as e:
+                logger.debug(f"Ollama request failed on attempt {attempt}: {e}")
+
+            # Exponential backoff before next attempt
+            if attempt < max_retries:
+                await __import__('asyncio').sleep(backoff_base * (2 ** (attempt - 1)))
+
+        logger.debug("Ollama generation failed after retries")
         return None
 
 

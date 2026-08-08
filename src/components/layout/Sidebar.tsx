@@ -16,13 +16,9 @@ export default function Sidebar() {
 
   const menuItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-    { path: '/admin/applications', icon: FileText, label: 'Applications' },
-    { path: '/admin/risk-analysis', icon: TrendingUp, label: 'Risk Analysis' },
-    { path: '/admin/explainability', icon: MessageSquare, label: 'Explainability' },
-    { path: '/admin/fraud', icon: Shield, label: 'Fraud Detection' },
-    { path: '/admin/analytics', icon: FileBarChart, label: 'Analytics' },
-    { path: '/admin/reports', icon: FileBarChart, label: 'Reports' },
-    { path: '/admin/settings', icon: Settings, label: 'Settings' },
+    { path: '/history', icon: FileText, label: 'Applications' },
+    { path: '/consent', icon: TrendingUp, label: 'New Assessment' },
+    { path: '/settings', icon: Settings, label: 'Settings' },
   ];
 
   const isActive = (path: string) => location.pathname === path;
